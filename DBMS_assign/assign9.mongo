@@ -1,0 +1,433 @@
+ show dbs
+
+use 31252_db
+db.createCollection("assign1")
+
+show dbs
+use temp
+show dbs
+db.dropDatabase(
+... )
+
+show dbs
+
+ use 31252_db
+
+show collections
+
+db.assign1.insertOne({
+    title: "Post Title 1",
+    body: "Body of post.",
+    category: "News",
+    likes: 1,
+    tags: ["news", "events"],
+    date: Date()
+ })
+
+db.assign1.inserMany([  
+...   {
+...     title: "Post Title 2",
+...     body: "Body of post.",
+...     category: "Event",
+...     likes: 2,
+...     tags: ["news", "events"],
+...     date: Date()
+...   },
+...   {
+...     title: "Post Title 3",
+...     body: "Body of post.",
+...     category: "Technology",
+...     likes: 3,
+...     tags: ["news", "events"],
+...     date: Date()
+...   },
+...   {
+...     title: "Post Title 4",
+...     body: "Body of post.",
+...     category: "Event",
+...     likes: 4,
+...     tags: ["news", "events"],
+...     date: Date()
+...   }
+... ])
+
+
+
+db.assign1.insertMany([ { title: "Post Title 2", body: "Body of post.", category: "Event", likes: 2, tags: ["news", "events"], date: Date() }, { title: "Post Title 3", body: "Body of post.", category: "Technology", likes: 3, tags: ["news", "events"], date: Date() }, { title: "Post Title 4", body: "Body of post.", category: "Event", likes: 4, tags: ["news", "events"], date: Date() }] )
+
+show collections
+
+db.assign1.find()
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'Post Title 1',
+    body: 'Body of post.',
+    category: 'News',
+    likes: 1,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6dd"),
+    title: 'Post Title 2',
+    body: 'Body of post.',
+    category: 'Event',
+    likes: 2,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.',
+    category: 'Technology',
+    likes: 3,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6df"),
+    title: 'Post Title 4',
+    body: 'Body of post.',
+    category: 'Event',
+    likes: 4,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  }
+]
+
+db.assign1.findOne()
+{
+  _id: ObjectId("6526378b24435283b302a6dc"),
+  title: 'Post Title 1',
+  body: 'Body of post.',
+  category: 'News',
+  likes: 1,
+  tags: [ 'news', 'events' ],
+  date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)'
+}
+31252_db> db.assign1.find({category:"News"})
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'Post Title 1',
+    body: 'Body of post.',
+    category: 'News',
+    likes: 1,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)'
+  }
+]
+
+db.assign1.find({category:"news"})
+
+db.assign1.find({category:"Technology"})
+[
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.',
+    category: 'Technology',
+    likes: 3,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  }
+]
+
+31252_db> db.assign1.find({likes:3})
+[
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.',
+    category: 'Technology',
+    likes: 3,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  }
+]
+31252_db> db.assign1.find({},{title:"",body:""})
+[
+  { _id: ObjectId("6526378b24435283b302a6dc"), title: '', body: '' },
+  { _id: ObjectId("652637c724435283b302a6dd"), title: '', body: '' },
+  { _id: ObjectId("652637c724435283b302a6de"), title: '', body: '' },
+  { _id: ObjectId("652637c724435283b302a6df"), title: '', body: '' }
+]
+31252_db> db.assign1.find({},{title:1,body:1})
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'Post Title 1',
+    body: 'Body of post.'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6dd"),
+    title: 'Post Title 2',
+    body: 'Body of post.'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6df"),
+    title: 'Post Title 4',
+    body: 'Body of post.'
+  }
+]
+31252_db> db.assign1.find({},{title:1,body:0})
+MongoServerError: Cannot do exclusion on field body in inclusion projection
+31252_db> db.assign1.find({},{title:1,body:1})
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'Post Title 1',
+    body: 'Body of post.'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6dd"),
+    title: 'Post Title 2',
+    body: 'Body of post.'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6df"),
+    title: 'Post Title 4',
+    body: 'Body of post.'
+  }
+]
+31252_db> db.assign1.find({},{title:1,likes:1})
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'Post Title 1',
+    likes: 1
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6dd"),
+    title: 'Post Title 2',
+    likes: 2
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    likes: 3
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6df"),
+    title: 'Post Title 4',
+    likes: 4
+  }
+]
+31252_db> db.assign1.find({},{title:1,likes:1 , _id:0})
+[
+  { title: 'Post Title 1', likes: 1 },
+  { title: 'Post Title 2', likes: 2 },
+  { title: 'Post Title 3', likes: 3 },
+  { title: 'Post Title 4', likes: 4 }
+]
+31252_db> db.assign1.find({},{title:1,likes:0 , _id:0})
+MongoServerError: Cannot do exclusion on field likes in inclusion projection
+31252_db> db.assign1.find({},{title:0,likes:0 , _id:0})
+[
+  {
+    body: 'Body of post.',
+    category: 'News',
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    body: 'Body of post.',
+    category: 'Event',
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    body: 'Body of post.',
+    category: 'Technology',
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    body: 'Body of post.',
+    category: 'Event',
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  }
+]
+31252_db> db.assign1.updateOne({title:"Post Title 1"} , $set{title:"hello i am title "})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:50)
+
+> 1 | db.assign1.updateOne({title:"Post Title 1"} , $set{title:"hello i am title "})
+    |                                                   ^
+  2 |
+
+31252_db> db.assign1.updateOne({title:"Post Title 1"} , {$set{title:"hello i am title "},{category:"BDSM"}})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:51)
+
+> 1 | db.assign1.updateOne({title:"Post Title 1"} , {$set{title:"hello i am title "},{category:"BDSM"}})
+    |                                                    ^
+  2 |
+
+31252_db> db.assign1.updateOne({title:"Post Title 1"} , {$set:{title:"hello i am title "},{category:"BDSM"}})
+Uncaught:
+SyntaxError: Unexpected token (1:80)
+
+> 1 | db.assign1.updateOne({title:"Post Title 1"} , {$set:{title:"hello i am title "},{category:"BDSM"}})
+    |                                                                                 ^
+  2 |
+
+31252_db> db.assign1.updateOne({title:"Post Title 1"} , {$set:{title:"hello i am title "}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+31252_db> db.assign1.fin({title:"hello i am title"})
+TypeError: db.assign1.fin is not a function
+31252_db> db.assign1.find({title:"hello i am title"})
+
+31252_db> db.assign1.find({likes: 1})
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'hello i am title ',
+    body: 'Body of post.',
+    category: 'News',
+    likes: 1,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)'
+  }
+]
+31252_db>  db.assign1.updateOne({title:"Post Title 1"} , {$set:{title:"hello i am title "}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+31252_db>  db.assign1.updateMany({} , {$inc:{like : 1s}})
+Uncaught:
+SyntaxError: Identifier directly after number. (1:43)
+
+> 1 |  db.assign1.updateMany({} , {$inc:{like : 1s}})
+    |                                            ^
+  2 |
+
+31252_db>  db.assign1.updateMany({} , {$inc:{like : 1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+31252_db>  db.assign1.find()
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'hello i am title ',
+    body: 'Body of post.',
+    category: 'News',
+    likes: 1,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)',
+    like: 1
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6dd"),
+    title: 'Post Title 2',
+    body: 'Body of post.',
+    category: 'Event',
+    likes: 2,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)',
+    like: 1
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.',
+    category: 'Technology',
+    likes: 3,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)',
+    like: 1
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6df"),
+    title: 'Post Title 4',
+    body: 'Body of post.',
+    category: 'Event',
+    likes: 4,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)',
+    like: 1
+  }
+]
+31252_db>  db.assign1.find({} , {$unset:{like:}})
+Uncaught:
+SyntaxError: Unexpected token (1:36)
+
+> 1 |  db.assign1.find({} , {$unset:{like:}})
+    |                                     ^
+  2 |
+
+31252_db>  db.assign1.find({} , {$unset:{like}})
+ReferenceError: like is not defined
+31252_db>  db.assign1.find({} , {$unset:"like"})
+MongoServerError: FieldPath field names may not start with '$'. Consider using $getField or $setField.
+31252_db>  db.assign1.aggregate([ {$unset:"like"}])
+[
+  {
+    _id: ObjectId("6526378b24435283b302a6dc"),
+    title: 'hello i am title ',
+    body: 'Body of post.',
+    category: 'News',
+    likes: 1,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:20:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6dd"),
+    title: 'Post Title 2',
+    body: 'Body of post.',
+    category: 'Event',
+    likes: 2,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6de"),
+    title: 'Post Title 3',
+    body: 'Body of post.',
+    category: 'Technology',
+    likes: 3,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  },
+  {
+    _id: ObjectId("652637c724435283b302a6df"),
+    title: 'Post Title 4',
+    body: 'Body of post.',
+    category: 'Event',
+    likes: 4,
+    tags: [ 'news', 'events' ],
+    date: 'Wed Oct 11 2023 11:21:03 GMT+0530 (India Standard Time)'
+  }
+]
+31252_db>  db.assign1.updateMany([ {$unset:"like"}])
+MongoInvalidArgumentError: Update document requires atomic operators
+31252_db> 
+

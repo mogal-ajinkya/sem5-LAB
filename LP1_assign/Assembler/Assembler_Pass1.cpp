@@ -4,6 +4,7 @@
 #include <map>
 #include <algorithm>
 #include <sstream>
+using namespace std;
 
 std::map<std::string, std::string> OPTAB = {
     {"STOP", "(IS,00)"},
@@ -91,35 +92,38 @@ public:
 
     void process()
     {
-        std::ifstream file("TestCase.txt");
+        ifstream file("TestCase.txt");
         if (!file.is_open())
         {
-            std::cerr << "Error opening file." << std::endl;
+            cerr << "Error opening file." << std::endl;
             return;
         }
 
-        std::string line;
-        while (std::getline(file, line))
+        string line;
+        while (getline(file, line))
         {
-            std::stringstream ss(line);
-            std::string word;
-            std::vector<std::string> words;
-            while (std::getline(ss, word, '\t'))
+            stringstream ss(line);
+            string word;
+            vector<string> words;
+            while (getline(ss, word, '\t'))
             {
                 words.push_back(word);
+                // cout <<"wprd" << word << " " ; 
             }
+            cout << endl;
 
             if (!words.empty())
             {
-                std::vector<std::string> pair = {words[0], std::to_string(lc)};
+                vector<string> pair = {words[0],to_string(lc)};
+                cout << pair[0]<<" " << pair[1] <<" " << lc; 
                 UpdateSymtab(pair);
             }
 
             if (words[1] == "START")
             {
-                lc = std::stoi(words[2]);
+                lc = stoi(words[2]);
                 lctab.push_back(lc);
-                ic += "(AD,01)\t(C," + std::to_string(lc) + ")\n";
+                ic += "(AD,01)\t(C," +  to_string(lc) + ")\n";
             }
 
             if (words[1] == "LTORG")
@@ -165,7 +169,7 @@ public:
             else if (words[1] == "DS")
             {
                 ic += "(DL,02)\t(C," + words[2] + ")\n";
-                lc += std::stoi(words[2]);
+                lc += stoi(words[2]);
                 lctab.push_back(lc);
             }
             else if (words[1] == "ORIGIN")
