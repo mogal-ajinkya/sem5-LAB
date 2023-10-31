@@ -6,8 +6,7 @@ db.createCollection("assign1")
 show dbs
 use temp
 show dbs
-db.dropDatabase(
-... )
+db.dropDatabase()
 
 show dbs
 

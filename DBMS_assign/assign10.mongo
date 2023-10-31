@@ -2,3 +2,124 @@ MongoDB Aggregation and Indexing:
 Implement aggregation and indexing with suitable example
 using MongoDB.
 
+show dbs
+use assign
+
+db.createCollection("assign10");
+
+db.assign10.insertMany([{
+    title: 'MongoDB Overview',
+    description: 'MongoDB is no sql database', 
+    by_user: 'tutorials point',
+    url: 'http://www.tutorialspoint.com', 
+    tags: ['mongodb', 'database', 'NoSQL'], 
+    likes: 100
+},
+{
+    title: 'NoSQL Overview',
+    description: 'No sql database is very fast', 
+    by_user: 'tutorials point',
+    url: 'http://www.tutorialspoint.com', 
+    tags: ['mongodb', 'database', 'NoSQL'], 
+    likes: 10
+},
+{
+    title: 'Neo4j Overview',
+    description: 'Neo4j is no sql database',
+    by_user: 'Neo4j',
+    url: 'http://www.neo4j.com',
+    tags: ['neo4j', 'database', 'NoSQL'], 
+    likes: 750
+}])
+
+db.assign10.find();
+
+
+gives no. of groups 
+db.assign10.aggregate([
+    {
+        $group:{_id : "$by_user"},
+    },
+    {
+        $count:"by_user"
+    }
+])
+
+you want to display a list stating how many tutorials are written by each user
+db.assign10.aggregate([
+    {
+        $group:{_id : "$by_user" , itemcount : {$count :{}}},
+    }
+])
+
+return with given limit 
+db.assign10.aggregate([ { $limit: 1 } ])
+
+
+same as projection show the set 1 values
+
+db.assign10.aggregate([
+  {
+    $project: {
+      "title": 1,
+      "likes": 1,
+      "tags": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+
+
+sorting stage matters 1 ass , -1 desec 
+
+db.assign10.aggregate([
+  {
+    $project: {
+      "title": 1,
+      "likes": 1,
+      "tags": 1
+    }
+  },
+  {
+    $limit: 5
+  },
+  {
+    $sort : {"likes":1}
+  }
+])
+
+db.assign10.aggregate([
+  {
+    $sort : {"likes":1}
+  },
+    {
+    $project: {
+      "title": 1,
+      "likes": 1,
+      "tags": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+
+
+$match similar to find 
+db.assign10.aggregate([
+    {
+        $match : {"likes":10}
+    },
+    {
+    $project: {
+      "title": 1,
+      "likes": 1,
+      "tags": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
