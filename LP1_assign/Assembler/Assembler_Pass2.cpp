@@ -1,11 +1,14 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <sstream>
+// #include <iostream>
+// #include <fstream>
+// #include <vector>
+// #include <map>
+// #include <algorithm>
+// #include <sstream>
+#include<bits/stdc++.h>
 
-std::map<std::string, std::string> OPTAB = {
+using namespace std;
+
+map<string, string> OPTAB = {
     {"STOP", "(IS,00)"},
     {"ADD", "(IS,01)"},
     {"SUB", "(IS,02)"},
@@ -19,14 +22,14 @@ std::map<std::string, std::string> OPTAB = {
     {"PRINT", "(IS,10)"},
 };
 
-std::map<std::string, std::string> REG = {
+map<string, string> REG = {
     {"AREG", "(1)"},
     {"BREG", "(2)"},
     {"CREG", "(3)"},
     {"DREG", "(4)"},
 };
 
-std::map<std::string, std::string> CC = {
+map<string, string> CC = {
     {"LT", "(1)"},
     {"LE", "(2)"},
     {"EQ", "(3)"},
@@ -38,14 +41,14 @@ std::map<std::string, std::string> CC = {
 class AssemblerPass2
 {
 private:
-    std::vector<std::string> icLines;
-    std::map<int, std::string> symtab;
-    std::map<int, std::string> littab;
-    std::vector<int> pooltab;
+    vector<string> icLines;
+    map<int, string> symtab;
+    map<int, string> littab;
+    vector<int> pooltab;
 
-    std::string generateMachineCode(const std::string &opcode, const std::vector<std::string> &operands)
+    string generateMachineCode(const string &opcode, const vector<string> &operands)
     {
-        std::string machineCode = opcode;
+        string machineCode = opcode;
         for (const auto &operand : operands)
         {
             machineCode += " " + operand;
@@ -54,125 +57,145 @@ private:
     }
 
 public:
-    AssemblerPass2(const std::string &icFileName)
+    AssemblerPass2(const string &icFileName)
     {
-        std::ifstream icFile(icFileName);
+        ifstream icFile(icFileName);
         if (!icFile.is_open())
         {
-            std::cerr << "Error opening IC file." << std::endl;
+            cerr << "Error opening IC file." << endl;
             return;
         }
 
-        std::string line;
-        while (std::getline(icFile, line))
+        string line;
+        while (getline(icFile, line))
         {
             icLines.push_back(line);
         }
         icFile.close();
 
-        std::ifstream symtabFile("Pass1_SYMTAB.txt");
+        ifstream symtabFile("Pass1_SYMTAB.txt");
         if (!symtabFile.is_open())
         {
-            std::cerr << "Error opening SYMTAB file." << std::endl;
+            cerr << "Error opening SYMTAB file." << endl;
             return;
         }
 
         int index = 0;
-        while (std::getline(symtabFile, line))
+        while (getline(symtabFile, line))
         {
-            std::stringstream ss(line);
-            std::string symbol, value;
+            stringstream ss(line);
+            string symbol, value;
             ss >> symbol >> value;
             symtab[index] = value;
             ++index;
         }
         symtabFile.close();
 
-        std::ifstream littabFile("Pass1_LITTAB.txt");
+        ifstream littabFile("Pass1_LITTAB.txt");
         if (!littabFile.is_open())
         {
-            std::cerr << "Error opening LITTAB file." << std::endl;
+            cerr << "Error opening LITTAB file." << endl;
             return;
         }
 
         index = 0;
-        while (std::getline(littabFile, line))
+        while (getline(littabFile, line))
         {
-            littab[index] = line;
+            stringstream ss(line);
+            string literal , value ;
+            ss >> literal >> value;
+            littab[index] = value;
             ++index;
         }
         littabFile.close();
 
-        std::ifstream pooltabFile("Pass1_POOLTAB.txt");
+        ifstream pooltabFile("Pass1_POOLTAB.txt");
         if (!pooltabFile.is_open())
         {
-            std::cerr << "Error opening POOLTAB file." << std::endl;
+            cerr << "Error opening POOLTAB file." << endl;
             return;
         }
 
-        while (std::getline(pooltabFile, line))
+        while (getline(pooltabFile, line))
         {
-            pooltab.push_back(std::stoi(line));
+            pooltab.push_back(stoi(line));
         }
         pooltabFile.close();
     }
 
     void process()
     {
-        std::ofstream outputFile("Pass2_MachineCode.txt");
+        ofstream outputFile("Pass2_MachineCode.txt");
         if (!outputFile.is_open())
         {
-            std::cerr << "Error opening output file." << std::endl;
+            cerr << "Error opening output file." << endl;
             return;
         }
 
         int poolIndex = 0;
         for (const auto &icLine : icLines)
         {
-            std::stringstream ss(icLine);
-            std::string token, opcode;
+            stringstream ss(icLine);
+            string token, opcode;
             ss >> token; // First token
+
+            
+            // cout << token << " " ;
 
             if (token == "(AD,01)")
             {
-                outputFile << "*\t(AD,01)" << std::endl;
+                // outputFile << "*\t(AD,01)" << endl;
+                outputFile << endl;
+
                 continue;
             }
             else if (token == "(AD,02)")
             {
-                outputFile << "*\t(AD,02)" << std::endl;
+                // outputFile << "*\t(AD,02)" << endl;
+                outputFile << endl;
                 ++poolIndex;
                 continue;
             }
 
-            opcode = token; // OPCODE
+            opcode = token[4]; 
+            opcode +=  token[5]; // OPCODE
 
-            std::vector<std::string> operands;
+            vector<string> operands;
             while (ss >> token)
             {
-                if (token[0] == '(')
+                // cout << token << endl;
+                if (token[1] == 'C')
                 {
-                    operands.push_back(token);
+                    operands.push_back(token.substr(3, token.length() - 4) );
+                    // cout << "token " << token.substr(3, token.length() - 4) << endl;
                 }
-                else if (token[0] == 'S' || token[0] == 'L')
+                else if (token[1] == 'S' || token[1] == 'L')
                 {
-                    int index = std::stoi(token.substr(2, token.length() - 3));
-                    if (token[0] == 'S')
+                    int index = stoi(token.substr(3, token.length() - 3));
+                    // cout << "index" << index << endl;
+                    if (token[1] == 'S')
                     {
-                        operands.push_back(symtab[index - 1]);
+                        operands.push_back(symtab[index]);
                     }
                     else
                     {
-                        operands.push_back(littab[index - 1]);
+                        operands.push_back(littab[index]);
                     }
                 }
                 else
                 {
-                    operands.push_back(token);
+                    string temp = "";
+                    temp += token[1];
+                    operands.push_back(temp);
                 }
             }
 
-            outputFile << generateMachineCode(opcode, operands) << std::endl;
+            for(auto it : operands)
+            {
+                cout << it << " " ;
+            }
+            cout << endl; 
+            outputFile << generateMachineCode(opcode, operands) << endl;
         }
 
         outputFile.close();

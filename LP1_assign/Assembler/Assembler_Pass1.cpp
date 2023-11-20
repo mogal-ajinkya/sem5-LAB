@@ -1,16 +1,17 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <sstream>
+// #include <iostream>
+// #include <fstream>
+// #include <vector>
+// #include <map>
+// #include <algorithm>
+// #include <sstream>
+#include<bits/stdc++.h>
 using namespace std;
 
-std::map<std::string, std::string> OPTAB = {
+map<string, string> OPTAB = {
     {"STOP", "(IS,00)"},
     {"ADD", "(IS,01)"},
     {"SUB", "(IS,02)"},
-    {"MUL", "(IS,03)"},
+    {"MULT", "(IS,03)"},
     {"MOVER", "(IS,04)"},
     {"MOVEM", "(IS,05)"},
     {"COMP", "(IS,06)"},
@@ -19,14 +20,14 @@ std::map<std::string, std::string> OPTAB = {
     {"READ", "(IS,09)"},
     {"PRINT", "(IS,10)"}};
 
-std::map<std::string, std::string> REG = {
+map<string, string> REG = {
     {"AREG", "(1)"},
     {"BREG", "(2)"},
     {"CREG", "(3)"},
     {"DREG", "(4)"}};
 
-std::map<std::string, std::string> CC = {
-    {"LT", "(1)"},
+map<string, string> CC = {
+    {"LT", "(CC,1)"},
     {"LE", "(2)"},
     {"EQ", "(3)"},
     {"GT", "(4)"},
@@ -36,12 +37,12 @@ std::map<std::string, std::string> CC = {
 class AssemblerPass1
 {
 private:
-    std::vector<std::vector<std::string>> symtab;
-    std::vector<std::vector<std::string>> littab;
-    std::string ic;
-    std::vector<int> pooltab;
+    vector<vector<string>> symtab;
+    vector<vector<string>> littab;
+    vector<int> pooltab;
+    string ic;
     int lc;
-    std::vector<int> lctab;
+    vector<int> lctab;
     int litIndex;
     int poolIndex;
 
@@ -51,9 +52,10 @@ public:
         lc = 0;
         litIndex = 0;
         poolIndex = 0;
+        ic = "";
     }
 
-    void UpdateSymtab(std::vector<std::string> pair)
+    void UpdateSymtab(vector<string> pair)
     {
         for (auto &entry : symtab)
         {
@@ -66,25 +68,25 @@ public:
         symtab.push_back(pair);
     }
 
-    int LCSymtab(std::string &word)
+    int LCSymtab(string &word)
     {
         for (const auto &entry : symtab)
         {
             if (entry[0] == word)
             {
-                return std::stoi(entry[1]);
+                return stoi(entry[1]);
             }
         }
         return -1;
     }
 
-    int PosSymtab(std::string &word)
+    int PosSymtab(string &word)
     {
-        for (size_t pos = 0; pos < symtab.size(); ++pos)
+        for (int pos = 0; pos < symtab.size(); pos++)
         {
             if (symtab[pos][0] == word)
             {
-                return static_cast<int>(pos);
+                return pos;
             }
         }
         return -1;
@@ -95,7 +97,7 @@ public:
         ifstream file("TestCase.txt");
         if (!file.is_open())
         {
-            cerr << "Error opening file." << std::endl;
+            cerr << "Error opening file." << endl;
             return;
         }
 
@@ -108,14 +110,14 @@ public:
             while (getline(ss, word, '\t'))
             {
                 words.push_back(word);
-                // cout <<"wprd" << word << " " ; 
+                // cout << word << '\t';
             }
-            cout << endl;
+            // cout << endl;
 
-            if (!words.empty())
+            if (words[0] != "")
             {
                 vector<string> pair = {words[0],to_string(lc)};
-                cout << pair[0]<<" " << pair[1] <<" " << lc; 
+                // cout << words[1] << " " << to_string(lc) << " " << pair[0]<<" " << pair[1] <<" " << lc; 
                 UpdateSymtab(pair);
             }
 
@@ -130,12 +132,13 @@ public:
             {
                 for (int i = poolIndex; i < litIndex; ++i)
                 {
-                    littab[i][1] = lc;
-                    ++lc;
+                    littab[i][1] = to_string(lc);
+                    lc++;
                     lctab.push_back(lc);
 
-                    std::string value = littab[i][0];
-                    value.erase(std::remove(value.begin(), value.end(), '='), value.end());
+                    string value = littab[i][0];
+                    value.erase(remove(value.begin(), value.end(), '='), value.end());
+                    value.erase(remove(value.begin(), value.end(), '"'), value.end());
                     ic += "(DL,01)\t(C," + value + ")\n";
                 }
 
@@ -146,24 +149,24 @@ public:
             {
                 for (int i = poolIndex; i < litIndex; ++i)
                 {
-                    littab[i][1] = lc;
+                    littab[i][1] = to_string(lc);
                     ++lc;
                     lctab.push_back(lc);
 
-                    std::string value = littab[i][0];
-                    value.erase(std::remove(value.begin(), value.end(), '='), value.end());
+                    string value = littab[i][0];
+                    value.erase(remove(value.begin(), value.end(), '='), value.end());
                     ic += "(DL,01)\t(C," + value + ")\n";
                 }
 
                 pooltab.push_back(poolIndex);
                 poolIndex = litIndex;
-
                 ic += "(AD,02)\n";
+                cout << ic << endl;
             }
             else if (words[1] == "DC")
             {
                 ic += "(DL,01)\t(C," + words[2] + ")\n";
-                ++lc;
+                lc++;
                 lctab.push_back(lc);
             }
             else if (words[1] == "DS")
@@ -174,26 +177,24 @@ public:
             }
             else if (words[1] == "ORIGIN")
             {
-                std::string locationWord = words[2].substr(0, words[2].find('+'));
+                string locationWord = words[2].substr(0, words[2].find('+'));
                 int location = LCSymtab(locationWord);
-                int addition = std::stoi(words[2].substr(words[2].find('+') + 1));
-                ic += "(AD,03)\t(S," + std::to_string(PosSymtab(locationWord) + 1) + ")+" + std::to_string(addition) + "\n";
+                int addition = stoi(words[2].substr(words[2].find('+')));
+                ic += "(AD,03)\t(C," + to_string(location + addition)+ ")"+"\n";
                 lc = location + addition;
                 lctab.push_back(lc);
             }
             else if (words[1] == "EQU")
             {
-                std::string locationWord = words[2].substr(0, words[2].find('+'));
+                string locationWord = words[2];
                 int location = LCSymtab(locationWord);
-                int addition = std::stoi(words[2].substr(words[2].find('+') + 1));
-                ic += "(AD,04)\t(S," + std::to_string(PosSymtab(locationWord) + 1) + ")+" + std::to_string(addition) + "\n";
-                UpdateSymtab({words[0], std::to_string(location + addition)});
+                ic += "(AD,04)\t(C," + to_string(location) +")" +  "\n";
+                UpdateSymtab({words[0], to_string(location)});
             }
             else if (OPTAB.find(words[1]) != OPTAB.end())
             {
                 ic += OPTAB[words[1]] + " ";
-
-                for (size_t i = 2; i < words.size(); ++i)
+                for (int i = 2; i < words.size(); i++)
                 {
                     if (CC.find(words[i]) != CC.end())
                     {
@@ -203,22 +204,23 @@ public:
                     {
                         ic += REG[words[i]] + " ";
                     }
-                    else if (words[i].find('=') == std::string::npos)
+                    else if (words[i].find('=') == string::npos)
                     {
                         int symbolLocation = LCSymtab(words[i]);
+                        // cout << words[i] << " " << symbolLocation << endl;
                         if (symbolLocation == -1)
                         {
-                            UpdateSymtab({words[i], std::to_string(lc)});
+                            UpdateSymtab({words[i], to_string(lc)});
                         }
 
                         int index = PosSymtab(words[i]);
-                        ic += "(S," + std::to_string(index + 1) + ")\t";
+                        ic += "(S," + to_string(index) + ")\t";
                     }
                     else
                     {
                         littab.push_back({words[i], "-1"});
-                        ++litIndex;
-                        ic += "(L," + std::to_string(litIndex) + ")\t";
+                        ic += "(L," + to_string(litIndex) + ")\t";
+                        litIndex++;
                     }
                 }
 
@@ -228,16 +230,18 @@ public:
             }
             else
             {
-                // continue;
+
             }
+
         }
         file.close();
 
-        std::ofstream ICFile("Pass1_IC.txt");
-        ICFile << ic;
+        ofstream ICFile("Pass1_IC.txt");
+        cout << ic << endl;
+        ICFile << ic ;
         ICFile.close();
 
-        std::ofstream SYMTABFile("Pass1_SYMTAB.txt");
+        ofstream SYMTABFile("Pass1_SYMTAB.txt");
         for (const auto &entry : symtab)
         {
             for (const auto &val : entry)
@@ -248,7 +252,7 @@ public:
         }
         SYMTABFile.close();
 
-        std::ofstream LITTABFile("Pass1_LITTAB.txt");
+        ofstream LITTABFile("Pass1_LITTAB.txt");
         for (const auto &entry : littab)
         {
             for (const auto &val : entry)
@@ -259,7 +263,7 @@ public:
         }
         LITTABFile.close();
 
-        std::ofstream POOLTABFile("Pass1_POOLTAB.txt");
+        ofstream POOLTABFile("Pass1_POOLTAB.txt");
         for (const auto &val : pooltab)
         {
             POOLTABFile << val << "\n";

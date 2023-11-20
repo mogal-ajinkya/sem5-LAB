@@ -6,7 +6,7 @@ void print(int blockSize[], int s)
 {
     for (int i = 0; i < s; i++)
         cout << blockSize[i] << " ";
-    cout << endl << endl;
+    cout << endl ;
 }
 //  First - Fit algorithm
 void firstFit(int blockSize[], int m, int processSize[], int n)
@@ -26,7 +26,9 @@ void firstFit(int blockSize[], int m, int processSize[], int n)
                 break;
             }
         }
+        print(blockSize, m);
     }
+
 
     cout << "\nProcess No.\tProcess Size\tBlock no.\n";
     for (int i = 0; i < n; i++)
@@ -72,6 +74,7 @@ void NextFit(int blockSize[], int m, int processSize[], int n)
 
             j = (j + 1) % m;
         }
+        print(blockSize, m);
     }
 
     cout << "\nProcess No.\tProcess Size\tBlock no.\n";
@@ -113,6 +116,7 @@ void bestFit(int blockSize[], int m, int processSize[], int n)
 			allocation[i] = bestIdx;
 			blockSize[bestIdx] -= processSize[i];
 		}
+        print(blockSize, m);
 	}
 
 	cout << "\nProcess No.\tProcess Size\tBlock no.\n";
@@ -152,6 +156,7 @@ void worstFit(int blockSize[], int m, int processSize[],int n)
 			allocation[i] = wstIdx;
 			blockSize[wstIdx] -= processSize[i];
 		}
+        print(blockSize, m);
 	}
 
 	cout << "\nProcess No.\tProcess Size\tBlock no.\n";
@@ -177,19 +182,24 @@ int main()
 
     firstFit(blockSize, m, processSize, n);
 
+    
     int blockSize1[] = {5, 10, 20};
     int processSize1[] = {10, 20, 5};
-
+    m = sizeof(blockSize1) / sizeof(blockSize1[0]);
+    n = sizeof(processSize1) / sizeof(processSize1[0]);
     NextFit(blockSize1, m, processSize1, n);
 
 	int blockSize2[] = {100, 500, 200, 300, 600};
 	int processSize2[] = {212, 417, 112, 426};
 
+     m = sizeof(blockSize2) / sizeof(blockSize2[0]);
+    n = sizeof(processSize2) / sizeof(processSize2[0]);
 	bestFit(blockSize2, m, processSize2, n);
 
     int blockSize3[] = {100, 500, 200, 300, 600};
     int processSize3[] = {212, 417, 112, 426};
- 
+     m = sizeof(blockSize3) / sizeof(blockSize3[0]);
+    n = sizeof(processSize3) / sizeof(processSize3[0]);
     worstFit(blockSize3, m, processSize3, n);
  
     return 0;

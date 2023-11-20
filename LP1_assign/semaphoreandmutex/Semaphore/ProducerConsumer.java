@@ -1,8 +1,9 @@
 import java.util.concurrent.*;
 
-public class ProducerConsumer {
+public class ProducerConsumer 
+{
     private static BlockingQueue<Integer> Buffer = new LinkedBlockingDeque<>();
-    private static Semaphore emptySlots = new Semaphore(10);
+    private static Semaphore emptySlots = new Semaphore(1);
     private static Semaphore fullSlots = new Semaphore(0);
 
     public static void main(String args[]) {
@@ -14,7 +15,7 @@ public class ProducerConsumer {
     }
 
     static class Producer implements Runnable {
-        @Override
+        // @Override
         public void run () {
             try {
                 while(true) {
@@ -22,6 +23,7 @@ public class ProducerConsumer {
                     emptySlots.acquire();
                     Buffer.put(item);
                     fullSlots.release();
+                    // TimeUnit.SECONDS.sleep(1);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -29,15 +31,18 @@ public class ProducerConsumer {
         }
 
         private int produceItem () {
-            return (int) (Math.random() * 100);
+            int item = (int) (Math.random() * 100);
+            System.out.println("produce : " + item);
+            return item ;
         }
     }
 
     static class Consumer implements Runnable {
-        @Override
+        // @Override
         public void run () {
             try {
                 while(true) {
+                    TimeUnit.SECONDS.sleep(1);
                     fullSlots.acquire();
                     int item = Buffer.take();
                     emptySlots.release();

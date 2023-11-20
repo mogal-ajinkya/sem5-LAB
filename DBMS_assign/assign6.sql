@@ -1,4 +1,4 @@
--- Cursors: (All types: Implicit, Explicit, Cursor FOR Loop, 
+ -- Cursors: (All types: Implicit, Explicit, Cursor FOR Loop, 
 -- Parameterized Cursor)
 
 

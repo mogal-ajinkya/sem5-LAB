@@ -123,3 +123,30 @@ db.assign10.aggregate([
     $limit: 5
   }
 ])
+
+
+simple index 
+db.assign10.createIndex(
+  {
+    likes : 1
+  }
+)
+
+db.assign10.getIndexes();
+db.assign10.dropIndex("likes_1");
+
+db.assign10.find().explain("executionStats")
+
+ db.assign10.find({likes:{$lt:100}}).explain("executionStats")           // before index total examined 3 after 1
+
+ when not use index 
+                small collections
+                frequent insertion  updation 
+                collections large make less indexs 
+                queries complexe 
+
+complex index 
+simple index 
+db.assign10.createIndex(
+  { "likes" : 1 , "by_user" : 1}
+)

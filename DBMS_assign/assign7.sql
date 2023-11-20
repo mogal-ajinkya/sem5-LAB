@@ -11,7 +11,7 @@
 -- requirements.'
 
 SET SQL_SAFE_UPDATES=0;
-
+show tables ;
 use teassign;
 CREATE TABLE Library (
     bid INT,
@@ -40,7 +40,7 @@ CREATE TABLE Library_Audit (
 );
 
 SELECT * FROM Library_Audit;
-
+drop table Library_Audit;
 
 
 -- Insert trigger
@@ -58,6 +58,12 @@ DELIMITER ;
 SHOW TRIGGERS FROM teassign;
 INSERT INTO Library (bid, bname, doi, status)
 VALUES (1, 'aganipankh', '2023-09-10', 'I');
+
+
+drop trigger insert_trigger;
+drop trigger update_trigger;
+drop trigger update_trigger1;
+drop trigger delete_trigger1;
 
 DELETE FROM Library 
 WHERE bname = 'aganipankh';

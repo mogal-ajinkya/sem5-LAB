@@ -4,6 +4,22 @@
 import java.util.Scanner;
 import com.mongodb.*;
 
+MongoClient
+DB  db = getDB
+DBCollection re = db.getCollection()
+DBCursor cu  = collection.find()
+
+cu.next()
+
+BasicDBObject doc = new BasicDBObject();
+doc.put("jaksf" , asdklf);
+
+collection.find()
+collection.insert 
+collection.update(where , update);
+collection.remove();
+
+
 public class assignment12{
     public static void main(String[] args) {
         try {

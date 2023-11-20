@@ -387,6 +387,9 @@ SyntaxError: Unexpected token (1:36)
 ReferenceError: like is not defined
 31252_db>  db.assign1.find({} , {$unset:"like"})
 MongoServerError: FieldPath field names may not start with '$'. Consider using $getField or $setField.
+
+
+
 31252_db>  db.assign1.aggregate([ {$unset:"like"}])
 [
   {
@@ -427,6 +430,4 @@ MongoServerError: FieldPath field names may not start with '$'. Consider using $
   }
 ]
 31252_db>  db.assign1.updateMany([ {$unset:"like"}])
-MongoInvalidArgumentError: Update document requires atomic operators
-31252_db> 
 

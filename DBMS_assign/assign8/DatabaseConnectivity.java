@@ -7,6 +7,14 @@ import java.util.Scanner;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
+
+// Connection
+// Statement
+// DriverManager.getConnection();
+// con.createStatement();
+// smt.executeUpdate(string)
+// ResultSet
+//  ResultSetMetaData rsmd = resultSet.getMetaData();
 public class DatabaseConnectivity
 {
 

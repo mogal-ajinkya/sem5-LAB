@@ -1,9 +1,9 @@
-
 import java.net.*;
 import java.util.Scanner;
 import java.io.*;
 
-class client {
+class client 
+{
     private Socket clientSocket = null;
     private Scanner input = new Scanner(System.in);
     private DataOutputStream out = null;

@@ -1,19 +1,17 @@
-
-
 import java.io.*;
 import java.net.*;
 
-
+        // OutputStream ostream = sock.getOutputStream(); 
+        // InputStream istream = sock.getInputStream(); 
 class clientrpc
 {
     public static void main(String[] args) throws Exception
     {
         Socket sock = new Socket("127.0.0.1", 3000); 
         BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in)); 
-        OutputStream ostream = sock.getOutputStream(); 
-        PrintWriter pwrite = new PrintWriter(ostream, true); 
-        InputStream istream = sock.getInputStream(); 
-        BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));   
+        PrintWriter pwrite = new PrintWriter(sock.getOutputStream(), true); 
+        BufferedReader receiveRead = new BufferedReader(new InputStreamReader(sock.getInputStream()));   
+        
         System.out.println("Client ready, type and press Enter key");
         String receiveMessage, sendMessage,temp; 
 

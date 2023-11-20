@@ -49,3 +49,6 @@ db.orders.aggregate([
    { $group: { _id: "$cust_id", value: { $sum: "$price" } } },
    { $out: "price_per_cust_agg" }
 ])
+
+
+

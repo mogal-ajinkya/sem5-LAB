@@ -19,8 +19,10 @@
 -- 10. Display Proj_name,Proj_location ,Proj_cost of all project started in 2004,2005,2007
 
 
-
+create database test;
+show databases;
 use test;
+use teassign;
 show tables;
 
 create table employee(
@@ -102,9 +104,9 @@ VALUES
 
 -- ********************
 -- 2. Display all Employee details with Department ‘Computer’ and ‘IT’ and Employee
-first name starting with 'p' or 'h'.
-emp_id ,Dept_id,Emp_fname , Emp_lname, Emp_Position, Emp_salary,Emp_JoinDate
-Dept_id,Dept_name, Dept_location
+-- first name starting with 'p' or 'h'.
+-- emp_id ,Dept_id,Emp_fname , Emp_lname, Emp_Position, Emp_salary,Emp_JoinDate
+-- Dept_id,Dept_name, Dept_location
 
 SELECT * FROM employee 
 WHERE (Dept_id IN (SELECT Dept_id FROM dept WHERE Dept_name = 'Computer' OR Dept_name = 'IT')) 

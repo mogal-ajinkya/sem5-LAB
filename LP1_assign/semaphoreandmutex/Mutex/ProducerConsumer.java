@@ -3,6 +3,7 @@ import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.*;
 
 public class ProducerConsumer {
     private static final int BUFFER_SIZE = 10;
@@ -29,7 +30,9 @@ public class ProducerConsumer {
                     try {
                         while (buffer.size() == BUFFER_SIZE) {
                             notFull.await();
+                            System.out.println("full to Produced: ");
                         }
+                        TimeUnit.SECONDS.sleep(1);
                         buffer.add(item);
                         System.out.println("Produced: " + item);
                         notEmpty.signal();
@@ -57,7 +60,9 @@ public class ProducerConsumer {
                     try {
                         while (buffer.isEmpty()) {
                             notEmpty.await();
+                        System.out.println("nothing Consume:  ");
                         }
+                        TimeUnit.SECONDS.sleep(1);
                         int item = buffer.poll();
                         System.out.println("Consumed: " + item);
                         notFull.signal();

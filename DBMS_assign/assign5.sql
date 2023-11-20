@@ -63,7 +63,7 @@ BEGIN
 	end if;
 return c;
 end$
-DELIMITER;
+DELIMITER ;
 
 SHOW PROCEDURE STATUS WHERE db = 'teassign';
 DROP PROCEDURE IF EXISTS proc_grade;
@@ -81,7 +81,7 @@ BEGIN
 	SELECT max(ROLL_NO) into max_num from stud_marks;
 	SELECT min(ROLL_NO) into iterator from stud_marks;
     
-	MAIN: while iterator <= max_num do
+	while iterator <= max_num do
 		
 		IF EXISTS(select STUD_NAME from stud_marks where stud_marks.ROLL_NO=iterator) then
 		SELECT STUD_NAME INTO n from stud_marks WHERE stud_marks.ROLL_NO=iterator;

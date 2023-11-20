@@ -69,4 +69,4 @@ call update_fine(3,'Atomic Habits','2023-06-10');
 call update_fine(4, 'Eat that frog','2023-06-10');
 
 select * from Fine ;
-select * from Borrower ;
+   select * from Borrower ;
